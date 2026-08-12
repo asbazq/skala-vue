@@ -91,9 +91,18 @@ const applyThresholds = () => {
   box-sizing: border-box;
   width: 100%;
   margin-top: 5px;
-  padding: 7px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  padding: 9px 10px;
+  border: 1px solid #293d54;
+  border-radius: 7px;
+  outline: 0;
+  background: #0b1828;
+  color: var(--text);
+  color-scheme: dark;
+}
+
+.threshold-controls input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(69, 207, 255, 0.12);
 }
 
 .alert-toggle,

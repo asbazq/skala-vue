@@ -1,3 +1,7 @@
+<script setup>
+import UnitToggler from '@/components/exercise/UnitToggler.vue'
+</script>
+
 <template>
   <div class="app-shell">
     <header class="site-header">
@@ -7,10 +11,11 @@
       </RouterLink>
       <nav aria-label="주요 메뉴">
         <RouterLink to="/">대시보드</RouterLink>
+        <RouterLink to="/compare/city_01/city_03">도시 비교</RouterLink>
         <RouterLink to="/guide">이용 안내</RouterLink>
         <RouterLink to="/about">서비스 소개</RouterLink>
       </nav>
-      <span class="update-state"><i></i> LIVE DATA</span>
+      <div class="header-tools"><UnitToggler /><span class="update-state"><i></i> LIVE DATA</span></div>
     </header>
     <main><RouterView /></main>
   </div>
@@ -23,6 +28,7 @@
 .brand b { color: #45cfff; }.brand-symbol { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 8px; background: #45cfff; color: #07111f; }
 nav { display: flex; gap: 6px; } nav a { padding: 8px 12px; border-radius: 8px; color: #8ba0b7; font-size: .84rem; font-weight: 600; } nav a:hover, nav a.router-link-exact-active { background: #17283b; color: #f2f8fc; }
 .update-state { display: flex; align-items: center; gap: 7px; color: #68deb4; font-size: .65rem; font-weight: 800; }.update-state i { width: 7px; height: 7px; border-radius: 50%; background: #52d6a9; box-shadow: 0 0 10px #52d6a9; }
+.header-tools { display: flex; align-items: center; gap: 12px; }
 main { width: min(1320px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 50px; }
 @media (max-width: 700px) { .site-header { padding: 0 14px; } nav { display: none; } main { width: calc(100% - 24px); padding-top: 20px; } }
 </style>

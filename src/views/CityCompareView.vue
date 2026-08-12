@@ -59,8 +59,8 @@ const changeCity = (position, cityId) => {
 </script>
 
 <template>
-  <section class="compare-view">
-    <h2>⚖️ 도시 날씨 비교</h2>
+<section class="compare-view">
+    <header class="page-heading"><p>CITY COMPARISON</p><h1>도시 날씨 비교</h1><span>두 도시의 주요 기상 수치를 한 화면에서 비교하세요.</span></header>
 
     <div class="selectors">
       <label>
@@ -124,12 +124,10 @@ const changeCity = (position, cityId) => {
 <style scoped>
 .compare-view {
   width: 100%;
+  color: var(--text);
 }
 
-.compare-view h2 {
-  margin: 0 0 16px;
-  font-size: 1.5rem;
-}
+.page-heading{margin-bottom:24px}.page-heading p{margin:0 0 6px;color:var(--cyan);font-size:.65rem;font-weight:800;letter-spacing:.15em}.page-heading h1{margin:0;font-size:clamp(2.2rem,5vw,3.6rem)}.page-heading span{display:block;margin-top:8px;color:var(--muted)}
 
 .selectors,
 .comparison-grid {
@@ -144,10 +142,16 @@ const changeCity = (position, cityId) => {
 
 .selectors {
   margin-bottom: 16px;
+  padding:20px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#0e1c2d;
 }
 
 .selectors label {
   font-weight: bold;
+  color:#9eb1c5;
+  font-size:.75rem;
 }
 
 .selectors select {
@@ -156,19 +160,24 @@ const changeCity = (position, cityId) => {
   width: 100%;
   margin-top: 6px;
   padding: 9px;
-  border: 1px solid #ced4da;
-  border-radius: 6px;
-  background: #fff;
+  border: 1px solid #293d54;
+  border-radius: 8px;
+  outline:0;
+  background: #0b1828;
+  color:var(--text);
+  color-scheme:dark;
 }
+.selectors select:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(69,207,255,.12)}
 
 .city-panel {
   display: flex;
-  min-height: 260px;
+  min-height: 250px;
   flex-direction: column;
   padding: 16px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(145deg,#101f31,#0d1928);
+  box-shadow:0 18px 45px #02091444;
 }
 
 .city-panel dl {
@@ -177,15 +186,17 @@ const changeCity = (position, cityId) => {
 
 .city-panel h3 {
   margin: 0;
-  color: #3498db;
+  color: var(--cyan);
+  font-size:1.35rem;
 }
 
 .city-panel dl div {
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  border-bottom: 1px solid #f1f3f5;
+  border-bottom: 1px solid #22364b;
 }
+.city-panel>p{color:var(--muted)}.city-panel dt{color:#71869c}.city-panel a{width:fit-content;padding:7px 10px;border-radius:7px;background:#173148;color:#8edfff;font-size:.72rem}
 
 .city-panel dd {
   margin: 0;
@@ -197,7 +208,9 @@ const changeCity = (position, cityId) => {
   margin-top: 16px;
   padding: 12px 16px;
   border-radius: 8px;
-  background: #e8f5e9;
+  border:1px solid #1e5146;
+  background: #102b31;
+  color:#75dfbd;
 }
 
 .comparison-result p {
@@ -207,6 +220,10 @@ const changeCity = (position, cityId) => {
 .back-link {
   display: inline-block;
   margin-top: 18px;
+  padding:9px 12px;
+  border-radius:8px;
+  background:#173148;
+  color:#8edfff;
 }
 
 @media (max-width: 520px) {

@@ -1,11 +1,14 @@
 <script setup>
+import { useConfigStore } from '@/stores/configStore'
 defineProps({ weather: { type: Object, required: true } })
+const configStore = useConfigStore()
+const formatTemp = value => `${configStore.unit === 'fahrenheit' ? Math.round((value * 9) / 5 + 32) : value}${configStore.unitSymbol}`
 </script>
 
 <template>
   <div class="forecasts">
-    <article class="panel"><header><div><p>HOURLY</p><h2>오늘의 날씨</h2></div><span>{{ weather.local }}</span></header><div class="items hourly"><div v-for="item in weather.hourly" :key="item.time"><small>{{ item.time }}</small><i>{{ item.icon }}</i><b>{{ item.temp }}°</b></div></div></article>
-    <article class="panel"><header><div><p>6-DAY OUTLOOK</p><h2>주간 예보</h2></div></header><div class="items weekly"><div v-for="item in weather.weekly" :key="item.day"><small>{{ item.day }}</small><i>{{ item.icon }}</i><b>{{ item.high }}° <em>{{ item.low }}°</em></b></div></div></article>
+    <article class="panel"><header><div><p>HOURLY</p><h2>오늘의 날씨</h2></div><span>{{ weather.local }}</span></header><div class="items hourly"><div v-for="item in weather.hourly" :key="item.time"><small>{{ item.time }}</small><i>{{ item.icon }}</i><b>{{ formatTemp(item.temp) }}</b></div></div></article>
+    <article class="panel"><header><div><p>6-DAY OUTLOOK</p><h2>주간 예보</h2></div></header><div class="items weekly"><div v-for="item in weather.weekly" :key="item.day"><small>{{ item.day }}</small><i>{{ item.icon }}</i><b>{{ formatTemp(item.high) }} <em>{{ formatTemp(item.low) }}</em></b></div></div></article>
   </div>
 </template>
 
