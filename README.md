@@ -156,6 +156,9 @@ const toggleFavorite = (cityId) => {
 
 또한 필터 UI를 `WeatherParent.vue`에 직접 작성하면 부모 컴포넌트가 데이터 관리와 필터 표시를 모두 담당하게 됩니다. 필터 UI를 `FavoriteFilter.vue`로 분리하여 각 컴포넌트의 역할을 명확하게 구분하고, Props와 Emits를 이용한 부모·자식 통신을 적용했습니다.
 
+<img width="691" height="681" alt="스크린샷 2026-08-12 오후 1 35 20" src="https://github.com/user-attachments/assets/163cb245-9369-4285-befe-05fbf4190382" />
+
+
 ### Props와 Emits
 
 ```vue
@@ -203,6 +206,14 @@ const sortedWeatherList = computed(() => {
 과제 3의 검색, 호버링, 즐겨찾기, 즐겨찾기 필터 기능을 `WeatherHomeView.vue`에 적용하고 Vue Router를 이용해 페이지 단위로 확장했습니다.
 
 모든 화면을 하나의 컴포넌트에 표시하면 날씨 목록, 도시 상세, 서비스 안내의 역할이 섞입니다. URL에 따라 View를 분리하여 사용자가 특정 도시의 상세 페이지를 직접 열거나 공유할 수 있도록 하고, 각 페이지의 역할을 명확하게 구분했습니다.
+
+<img width="354" height="594" alt="스크린샷 2026-08-12 오후 3 45 42" src="https://github.com/user-attachments/assets/b4fd7d7b-2038-41f5-9329-7b925799156b" />
+
+<img width="354" height="392" alt="스크린샷 2026-08-12 오후 3 46 03" src="https://github.com/user-attachments/assets/37e2a994-af70-4b66-ad83-8b8e1c8e8ce5" />
+
+<img width="358" height="245" alt="스크린샷 2026-08-12 오후 3 45 50" src="https://github.com/user-attachments/assets/cc26ed44-faff-4787-87b6-c6ea19f23b71" />
+
+<img width="361" height="246" alt="스크린샷 2026-08-12 오후 3 45 59" src="https://github.com/user-attachments/assets/6193afc7-682a-4bca-8c7d-893cf503e139" />
 
 ### 프로젝트 구조
 
@@ -340,6 +351,8 @@ const changeCity = (position, cityId) => {
 
 단위 설정을 각 View에서 개별적으로 관리하면 메인 목록은 화씨이고 상세 페이지는 섭씨인 상태가 발생할 수 있습니다. 사용자가 선택한 단위를 모든 라울트에 동일하게 적용하기 위해 `configStore`로 분리했습니다.
 
+<img width="365" height="702" alt="스크린샷 2026-08-12 오후 6 55 56" src="https://github.com/user-attachments/assets/e7ec2998-5ee3-4ba7-bb07-16bf20a9fa49" />
+
 ### configStore
 
 파일: `src/stores/configStore.js`
@@ -398,47 +411,6 @@ export const useTemperature = (celsiusSource) => {
 - `WeatherDetailView.vue`: 도시 상세 기상관측 기온
 - `CityCompareView.vue`: 두 도시의 기온과 기온 차이
 
-### 추가 Store: favoriteStore
-
-파일: `src/stores/favoriteStore.js`
-
-과제 3에서 즐겨찾기 배열을 `WeatherParent` 내부에서 관리했지만, Router를 적용한 후에는 View가 제거되고 다시 생성될 때 즐겨찾기 상태가 초기화될 수 있습니다. 즐겨찾기를 Pinia Store로 옮겨 다른 페이지를 방문한 후 돌아와도 선택 상태가 유지되도록 했습니다.
-
-```js
-export const useFavoriteStore = defineStore('favorite', () => {
-  const cityIds = ref([])
-  const count = computed(() => cityIds.value.length)
-  const hasFavorite = (cityId) => cityIds.value.includes(cityId)
-
-  const toggleFavorite = (cityId) => {
-    cityIds.value = hasFavorite(cityId)
-      ? cityIds.value.filter((id) => id !== cityId)
-      : [...cityIds.value, cityId]
-  }
-
-  return { cityIds, count, hasFavorite, toggleFavorite }
-})
-```
-
-- state `cityIds`: 즐겨찾기한 도시 ID 목록을 저장합니다.
-- getter `count`: 즐겨찾기 도시 개수를 자동 계산합니다.
-- action `toggleFavorite`: 도시 ID를 즐겨찾기에 추가하거나 제거합니다.
-- `hasFavorite`: 특정 도시의 즐겨찾기 여부를 확인합니다.
-
-### Store 동작 흐름
-
-```text
-단위변경 버튼 클릭
-→ UnitToggler가 configStore.toggleUnit() 실행
-→ configStore.unit과 unitSymbol 변경
-→ useTemperature의 computed 재계산
-→ 메인·상세·비교 화면의 온도 단위 동시 변경
-
-즐겨찾기 버튼 클릭
-→ favoriteStore.toggleFavorite(cityId) 실행
-→ cityIds와 count 변경
-→ 카드의 별 모양·정렬·즐겨찾기 필터 자동 갱신
-```
 
 ### 추가 Store: weatherAlertStore
 
@@ -446,7 +418,7 @@ export const useFavoriteStore = defineStore('favorite', () => {
 
 사용자가 폭염·한파 기준 기온과 경고 활성화 여부를 설정하고, 메인 날씨 카드와 도시 상세 화면에서 동일한 기준으로 위험 상태를 표시하는 Store입니다.
 
-경고 기준을 각 컴포넌트에서 개별적으로 관리하면 화면마다 다른 위험 판정이 표시될 수 있습니다. 이 설정은 여러 View에서 공통으로 사용되고 라울트가 바뀌어도 유지되어야 하므로 Pinia Store로 분리했습니다.
+경고 기준을 각 컴포넌트에서 개별적으로 관리하면 화면마다 다른 위험 판정이 표시될 수 있습니다. 이 설정은 여러 View에서 공통으로 사용되고 route가 바뀌어도 유지되어야 하므로 Pinia Store로 분리했습니다.
 
 현재 날씨는 Mock Data이지만 이후 Axios로 실제 기상 API와 연결할 예정입니다. API에서 받은 기온 데이터와 사용자가 설정하는 경고 기준은 성격이 다르므로, Store에는 사용자 설정만 저장하고 날씨 데이터를 Store의 기준과 비교하도록 설계했습니다. 따라서 Mock Data가 API 응답으로 바뀌어도 경고 설정과 판정 로직을 그대로 재사용할 수 있습니다.
 
