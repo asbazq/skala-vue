@@ -1,83 +1,28 @@
-<script setup>
-import UnitToggler from '@/components/exercise/UnitToggler.vue'
-</script>
-
 <template>
-  <div class="app-container">
-    <h1>⛅ 과제 5: 스토어 적용</h1>
-    <hr />
-
-    <div class="dashboard-wrapper">
-      <nav class="navigation-bar" aria-label="주요 탐색">
-        <RouterLink to="/" class="nav-item">🌦️ 날씨 대시보드</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/about" class="nav-item">ℹ️ 서비스 소개</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/guide" class="nav-item">💡 날씨 안내</RouterLink>
-        <span class="divider">|</span>
-        <RouterLink to="/compare/city_01/city_03" class="nav-item">⚖️ 도시 비교</RouterLink>
-        <UnitToggler />
+  <div class="app-shell">
+    <header class="site-header">
+      <RouterLink class="brand" to="/" aria-label="Weather Track 홈">
+        <span class="brand-symbol">◉</span>
+        <span>WEATHER <b>TRACK</b></span>
+      </RouterLink>
+      <nav aria-label="주요 메뉴">
+        <RouterLink to="/">대시보드</RouterLink>
+        <RouterLink to="/guide">이용 안내</RouterLink>
+        <RouterLink to="/about">서비스 소개</RouterLink>
       </nav>
-
-      <main>
-        <RouterView />
-      </main>
-    </div>
+      <span class="update-state"><i></i> LIVE DATA</span>
+    </header>
+    <main><RouterView /></main>
   </div>
 </template>
 
-<style>
-@import '@/assets/exercise.css';
-
-#app {
-  display: block;
-  width: 100%;
-  max-width: none;
-  padding: 24px 16px;
-}
-
-.app-container {
-  box-sizing: border-box;
-  width: min(680px, 100%);
-  margin: 0 auto;
-  padding: 30px 40px;
-}
-
-.dashboard-wrapper {
-  width: min(600px, 100%);
-}
-
-.navigation-bar {
-  flex-wrap: wrap;
-  gap: 8px 4px;
-  width: 100%;
-}
-
-.navigation-bar .divider {
-  margin: 0 8px;
-}
-
-@media (max-width: 600px) {
-  #app {
-    padding: 12px;
-  }
-
-  .app-container {
-    padding: 22px 16px;
-  }
-
-  .navigation-bar {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .navigation-bar .nav-item {
-    width: 100%;
-    text-align: center;
-  }
-
-  .navigation-bar .divider {
-    display: none;
-  }
-}
+<style scoped>
+.app-shell { min-height: 100vh; }
+.site-header { position: sticky; top: 0; z-index: 1000; height: 70px; padding: 0 max(20px, calc((100vw - 1320px) / 2)); display: flex; align-items: center; justify-content: space-between; gap: 24px; border-bottom: 1px solid #23364b; background: rgba(7, 17, 31, .9); backdrop-filter: blur(18px); }
+.brand { display: flex; align-items: center; gap: 10px; color: #edf8ff; font-size: .86rem; font-weight: 800; letter-spacing: .12em; white-space: nowrap; }
+.brand b { color: #45cfff; }.brand-symbol { display: grid; width: 30px; height: 30px; place-items: center; border-radius: 8px; background: #45cfff; color: #07111f; }
+nav { display: flex; gap: 6px; } nav a { padding: 8px 12px; border-radius: 8px; color: #8ba0b7; font-size: .84rem; font-weight: 600; } nav a:hover, nav a.router-link-exact-active { background: #17283b; color: #f2f8fc; }
+.update-state { display: flex; align-items: center; gap: 7px; color: #68deb4; font-size: .65rem; font-weight: 800; }.update-state i { width: 7px; height: 7px; border-radius: 50%; background: #52d6a9; box-shadow: 0 0 10px #52d6a9; }
+main { width: min(1320px, calc(100% - 40px)); margin: 0 auto; padding: 30px 0 50px; }
+@media (max-width: 700px) { .site-header { padding: 0 14px; } nav { display: none; } main { width: calc(100% - 24px); padding-top: 20px; } }
 </style>
