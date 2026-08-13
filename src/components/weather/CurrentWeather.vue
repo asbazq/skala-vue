@@ -1,11 +1,16 @@
 <script setup>
+import { useConfigStore } from '@/stores/configStore'
+import WeatherWarnings from '@/components/weather/WeatherWarnings.vue'
 defineProps({ weather: { type: Object, required: true } })
+const configStore = useConfigStore()
+const formatTemp = value => `${configStore.unit === 'fahrenheit' ? Math.round((value * 9) / 5 + 32) : value}${configStore.unitSymbol}`
 </script>
 
 <template>
   <article class="panel current-card">
     <header><div><p>{{ weather.country }}</p><h2>{{ weather.local }} <small>{{ weather.name }}</small></h2></div><span>● LIVE</span></header>
-    <div class="primary"><div class="weather-icon">{{ weather.icon }}</div><div><strong>{{ weather.temp }}°</strong><p>{{ weather.status }}</p><small>체감온도 {{ weather.feels }}° · 최고 {{ weather.high }}° / 최저 {{ weather.low }}°</small></div></div>
+    <div class="primary"><div class="weather-icon">{{ weather.icon }}</div><div><strong>{{ formatTemp(weather.temp) }}</strong><p>{{ weather.status }}</p><small>체감온도 {{ formatTemp(weather.feels) }} · 최고 {{ formatTemp(weather.high) }} / 최저 {{ formatTemp(weather.low) }}</small></div></div>
+    <WeatherWarnings :warnings="weather.warnings" compact />
     <div class="details">
       <div><span>습도</span><b>{{ weather.humidity }}%</b></div><div><span>풍속</span><b>{{ weather.wind }} m/s</b></div><div><span>기압</span><b>{{ weather.pressure }} hPa</b></div><div><span>강수량</span><b>{{ weather.rain }} mm</b></div>
     </div>

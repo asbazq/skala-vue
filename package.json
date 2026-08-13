@@ -1,5 +1,5 @@
 {
-  "name": "skala-vue",
+  "name": "nagalkka",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -14,8 +14,10 @@
   },
   "dependencies": {
     "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "axios": "^1.19.0",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.4",
+    "topojson-client": "^3.1.0",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },
