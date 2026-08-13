@@ -5,6 +5,7 @@ const weatherIcons = {
 
 const iconFor = weather => weatherIcons[weather?.main] ?? '🌤️'
 const round = value => Math.round(Number(value) || 0)
+const apiUrl = (route, query = '') => `/api/proxy?route=${route}${query ? `&${query}` : ''}`
 const requestJson = async url => {
   const response = await fetch(url)
   const data = await response.json()
@@ -34,8 +35,8 @@ const dailyForecast = list => {
 export const fetchCityWeather = async city => {
   const query = `lat=${city.coord[0]}&lon=${city.coord[1]}`
   const [current, forecast] = await Promise.all([
-    requestJson(`/api/weather?${query}`),
-    requestJson(`/api/forecast?${query}`),
+    requestJson(apiUrl('weather', query)),
+    requestJson(apiUrl('forecast', query)),
   ])
   const timezone = forecast.city?.timezone ?? current.timezone ?? 0
   const localParts = timestamp => {
@@ -143,7 +144,7 @@ export const fetchKmaWarnings = async () => {
   const cached = readWarningCache()
   if (cached?.data && Date.now() - cached.checkedAt < WARNING_CACHE_TTL) return cached.data
   try {
-    const response = await fetch('/api/warnings')
+    const response = await fetch(apiUrl('warnings'))
     const text = await response.text()
     if (!response.ok) throw new Error(`기상청 예·특보 요청에 실패했습니다. (${response.status})`)
     const data = parseWarnings(text)
@@ -213,7 +214,7 @@ export const fetchKmaTyphoons = async (count = 5) => {
 
   try {
     const year = new Date().getFullYear()
-    const listResponse = await fetch(`/api/typhoon-list?year=${year}`)
+    const listResponse = await fetch(apiUrl('typhoon-list', `year=${year}`))
     const listText = await listResponse.text()
     let errorPayload
     try { errorPayload = JSON.parse(listText) } catch { errorPayload = null }
@@ -237,7 +238,7 @@ export const fetchKmaTyphoons = async (count = 5) => {
 
     const cachedById = new Map((cached?.data ?? []).map(storm => [storm.id, storm]))
     const results = await Promise.allSettled(storms.map(async columns => {
-      const response = await fetch(`/api/typhoon-detail?year=${columns[0]}&typ=${columns[1]}`)
+      const response = await fetch(apiUrl('typhoon-detail', `year=${columns[0]}&typ=${columns[1]}`))
       const detailText = await response.text()
       let detailError
       try { detailError = JSON.parse(detailText) } catch { detailError = null }

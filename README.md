@@ -1091,3 +1091,38 @@ View는 동적 `import()`로 지연 로딩합니다. 해당 화면에 접속할 
 - 아이콘만 있는 즐겨찾기 버튼에 동적 `aria-label` 제공
 - 지도 팝업, SVG 그래프와 특보 영역에 의미를 설명하는 접근성 속성 적용
 - `prefers-reduced-motion` 환경에서는 404 레이더 애니메이션 정지
+
+## Vercel 배포
+
+로컬 개발에서는 `vite.config.js`의 미들웨어가 외부 날씨 API를 프록시합니다. 프로덕션 Vercel 배포에서는 해당 개발 미들웨어가 실행되지 않으므로 `api/proxy.js`의 Vercel Function이 같은 역할을 담당합니다.
+
+```text
+브라우저 /api/proxy 요청
+→ Vercel Function 실행
+→ process.env에서 API 인증키 확인
+→ OpenWeather 또는 기상청 요청
+→ 브라우저에 응답 반환
+```
+
+Vercel 프로젝트의 `Settings → Environment Variables`에 다음 환경변수를 등록해야 합니다.
+
+```env
+OPENWEATHER_API_KEY=OpenWeather_API_키
+KMA_API_KEY=기상청_API허브_인증키
+```
+
+- Production 배포에는 두 변수를 Production 환경에 등록합니다.
+- Preview 배포에서도 확인하려면 Preview 환경에도 등록합니다.
+- 환경변수를 추가하거나 수정한 뒤에는 기존 배포가 아니라 새로 재배포해야 합니다.
+- 변수 이름은 대소문자를 포함해 코드와 정확히 같아야 합니다.
+- `VITE_` 접두사를 붙이면 클라이언트 번들에 노출될 수 있으므로 비밀키에는 사용하지 않습니다.
+
+`vercel.json`은 Vue Router의 상세·비교 URL을 새로고침해도 `index.html`을 제공하도록 SPA fallback을 설정합니다. `/api/proxy`는 `api/proxy.js` Vercel Function으로 처리됩니다.
+
+배포 후 다음 주소로 함수 연결 상태를 확인할 수 있습니다.
+
+```text
+https://배포주소.vercel.app/api/proxy?route=weather&lat=37.5665&lon=126.978
+```
+
+정상이라면 서울 날씨 JSON이 반환됩니다. 오류가 반환되면 Vercel의 Functions 로그에서 환경변수 누락, 외부 API 인증 오류 또는 기상청 API 승인 상태를 확인합니다.
