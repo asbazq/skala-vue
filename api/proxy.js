@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 
-const allowedRoutes = new Set(['weather', 'forecast', 'warnings', 'typhoon-list', 'typhoon-detail', 'typhoon'])
+const allowedRoutes = new Set(['health', 'weather', 'forecast', 'warnings', 'typhoon-list', 'typhoon-detail', 'typhoon'])
 const kstYear = () => new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCFullYear()
 
 const buildUpstream = requestUrl => {
@@ -58,10 +58,22 @@ export default async function handler(request, response) {
 
   try {
     const requestUrl = new URL(request.url, `https://${request.headers.host || 'localhost'}`)
+    if (requestUrl.searchParams.get('route') === 'health') {
+      return response.status(200).json({
+        ok:true,
+        runtime:`node ${process.version}`,
+        environment:process.env.VERCEL_ENV || 'local',
+        region:process.env.VERCEL_REGION || 'local',
+        keys:{
+          openWeather:Boolean(process.env.OPENWEATHER_API_KEY?.trim()),
+          kma:Boolean(process.env.KMA_API_KEY?.trim()),
+        },
+      })
+    }
     const target = buildUpstream(requestUrl)
     if (!target) return response.status(400).json({ message:'지원하지 않는 API route입니다.' })
 
-    const apiResponse = await fetch(target.upstream)
+    const apiResponse = await fetch(target.upstream, { signal:AbortSignal.timeout(15_000) })
     const responseBuffer = Buffer.from(await apiResponse.arrayBuffer())
     response.status(apiResponse.status)
     response.setHeader('Cache-Control', 'no-store')
@@ -75,6 +87,11 @@ export default async function handler(request, response) {
     return response.send(responseBuffer)
   } catch (error) {
     console.error('API proxy error:', error.message)
-    return response.status(502).json({ message:error.message })
+    const missingEnvironment = error.message.includes('환경변수가 없습니다')
+    return response.status(missingEnvironment ? 500 : 502).json({
+      code:missingEnvironment ? 'ENV_MISSING' : error.name === 'TimeoutError' ? 'UPSTREAM_TIMEOUT' : 'PROXY_ERROR',
+      message:error.message,
+      cause:error.cause?.code || null,
+    })
   }
 }
