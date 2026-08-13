@@ -492,12 +492,16 @@ const getRiskLevel = (celsius) => {
 
 ### 1. 대한민국 17개 시·도 날씨 확인
 
+<img width="685" height="840" alt="스크린샷 2026-08-13 오후 4 15 40" src="https://github.com/user-attachments/assets/7a01bd7c-26ca-4cbb-b690-745ba8c4d72f" />
+
 - 특별시, 광역시, 특별자치시·도와 각 도의 대표 지역 날씨 제공
 - 현재 기온, 체감온도, 최고·최저기온, 습도, 풍속, 기압과 강수량 표시
 - 지역 검색과 즐겨찾기 필터 지원
 - 지역 카드를 클릭하면 해당 지역 상세 화면으로 이동
 
 ### 2. 개인 외출 기온 기준 설정
+
+<img width="672" height="769" alt="스크린샷 2026-08-13 오후 4 16 22" src="https://github.com/user-attachments/assets/ff962fe4-c3ed-498b-945a-6036dbf505f7" />
 
 - 사용자가 “이 온도 이하면 나가기 싫어요”, “이 온도 이상이면 나가기 싫어요” 기준 설정
 - 기준보다 더운 지역은 붉은 계열, 추운 지역은 파란 계열로 구분
@@ -506,6 +510,8 @@ const getRiskLevel = (celsius) => {
 
 ### 3. 24시간 및 일별 날씨 예보
 
+<img width="896" height="730" alt="스크린샷 2026-08-13 오후 4 20 52" src="https://github.com/user-attachments/assets/f01b6a6e-1196-4479-9128-06e7a9ae39ef" />
+
 - 현재부터 약 24시간 동안의 날씨를 8개 시간대로 제공
 - 기온, 날씨 상태, 습도와 강수확률 표시
 - 현재 시간과 개인 외출 기준을 벗어나는 시간대 강조
@@ -513,6 +519,8 @@ const getRiskLevel = (celsius) => {
 - 앞으로의 일별 예보에서 최고·최저기온 확인
 
 ### 4. 내 외출 기준 지도
+
+<img width="883" height="516" alt="스크린샷 2026-08-13 오후 4 18 29" src="https://github.com/user-attachments/assets/e7034f20-183d-497e-9102-9fc98996957c" />
 
 - Leaflet과 OpenStreetMap을 이용한 대한민국 날씨 지도
 - 광역자치단체 행정구역 외곽선을 실제 지역 형태로 표시
@@ -531,6 +539,8 @@ const getRiskLevel = (celsius) => {
 
 ### 6. 최근 태풍 경로 확인
 
+<img width="881" height="524" alt="스크린샷 2026-08-13 오후 4 19 13" src="https://github.com/user-attachments/assets/9c18c23a-1588-4b5b-bd2c-350fb25d0b18" />
+
 - 기상청에서 제공하는 최근 태풍 5개의 이동 경로 표시
 - 현재 태풍이 없으면 가장 최근 태풍의 정보와 최종 관측일 제공
 - 실제 이동 경로, 예측 경로, 강풍반경과 제공되는 예상 범위 표시
@@ -538,6 +548,8 @@ const getRiskLevel = (celsius) => {
 - 진행 중인 태풍은 30분, 종료된 과거 태풍은 6시간 동안 캐싱
 
 ### 7. 어디로 나갈까? 도시 비교
+
+<img width="891" height="781" alt="스크린샷 2026-08-13 오후 4 19 52" src="https://github.com/user-attachments/assets/d60a0112-7228-4d29-b45a-6d18081bf1e3" />
 
 - 서로 다른 두 지역과 예보 날짜를 선택해 외출 조건 비교
 - 개인 기온 기준, 습도, 강수확률, 풍속과 발효 특보를 종합한 100점 만점의 외출 쾌적도 제공
@@ -548,6 +560,9 @@ const getRiskLevel = (celsius) => {
 - WeatherCard와 지도에도 동일한 쾌적도 점수를 표시해 화면마다 판단 기준 통일
 
 ### 8. 지역 상세 날씨
+
+<img width="451" height="604" alt="스크린샷 2026-08-13 오후 4 17 27" src="https://github.com/user-attachments/assets/352ab105-dee4-4a56-9540-02692892e035" />
+
 
 - 선택한 지역의 현재 관측값과 개인 외출 기준 상태 표시
 - 현재 발효 중인 지역 예·특보 확인
