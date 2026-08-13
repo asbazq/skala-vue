@@ -24,28 +24,33 @@ const apiMiddleware = (mode) => {
 const createApiHandler = (env) => async (request, response, next) => {
   try {
     const requestUrl = new URL(request.url, 'http://localhost')
+    const apiPath = requestUrl.pathname === '/proxy'
+      ? `/${requestUrl.searchParams.get('route') || ''}`
+      : requestUrl.pathname
     let upstream
 
-    if (requestUrl.pathname === '/weather' || requestUrl.pathname === '/forecast') {
-      const endpoint = requestUrl.pathname === '/weather' ? 'weather' : 'forecast'
+    if (apiPath === '/weather' || apiPath === '/forecast') {
+      const endpoint = apiPath === '/weather' ? 'weather' : 'forecast'
       upstream = new URL(`https://api.openweathermap.org/data/2.5/${endpoint}`)
-      for (const [key, value] of requestUrl.searchParams) upstream.searchParams.set(key, value)
+      for (const [key, value] of requestUrl.searchParams) {
+        if (key !== 'route') upstream.searchParams.set(key, value)
+      }
       upstream.searchParams.set('appid', env.OPENWEATHER_API_KEY)
       upstream.searchParams.set('units', 'metric')
       upstream.searchParams.set('lang', 'kr')
-    } else if (requestUrl.pathname === '/typhoon-list') {
+    } else if (apiPath === '/typhoon-list') {
       upstream = new URL('https://apihub.kma.go.kr/api/typ01/url/typ_lst.php')
       upstream.searchParams.set('YY', requestUrl.searchParams.get('year') || String(new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCFullYear()))
       upstream.searchParams.set('disp', '1')
       upstream.searchParams.set('authKey', env.KMA_API_KEY)
-    } else if (requestUrl.pathname === '/typhoon-detail') {
+    } else if (apiPath === '/typhoon-detail') {
       upstream = new URL('https://apihub.kma.go.kr/api/typ01/url/typ_data.php')
       upstream.searchParams.set('YY', requestUrl.searchParams.get('year'))
       upstream.searchParams.set('typ', requestUrl.searchParams.get('typ'))
       upstream.searchParams.set('mode', '1')
       upstream.searchParams.set('disp', '1')
       upstream.searchParams.set('authKey', env.KMA_API_KEY)
-    } else if (requestUrl.pathname === '/typhoon') {
+    } else if (apiPath === '/typhoon') {
       upstream = new URL('https://apihub.kma.go.kr/api/typ01/url/typ_now.php')
       const kstNow = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().replace(/[-:T]/g, '').slice(0, 12)
       upstream.searchParams.set('tm', kstNow)
@@ -53,7 +58,7 @@ const createApiHandler = (env) => async (request, response, next) => {
       upstream.searchParams.set('disp', '1')
       upstream.searchParams.set('help', '1')
       upstream.searchParams.set('authKey', env.KMA_API_KEY)
-    } else if (requestUrl.pathname === '/warnings') {
+    } else if (apiPath === '/warnings') {
       upstream = new URL('https://apihub.kma.go.kr/api/typ01/url/wrn_now_data.php')
       upstream.searchParams.set('fe', 'f')
       upstream.searchParams.set('tm', requestUrl.searchParams.get('tm') || '')
@@ -68,7 +73,7 @@ const createApiHandler = (env) => async (request, response, next) => {
     let apiResponse = await fetch(upstream)
     let responseBuffer = Buffer.from(await apiResponse.arrayBuffer())
 
-    if (requestUrl.pathname === '/typhoon' && !/^[01],\d{4},/m.test(responseBuffer.toString('latin1'))) {
+    if (apiPath === '/typhoon' && !/^[01],\d{4},/m.test(responseBuffer.toString('latin1'))) {
       const year = new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCFullYear()
       const listUrl = new URL('https://apihub.kma.go.kr/api/typ01/url/typ_lst.php')
       listUrl.searchParams.set('YY', String(year))
@@ -94,7 +99,7 @@ const createApiHandler = (env) => async (request, response, next) => {
       }
     }
     response.statusCode = apiResponse.status
-    if (requestUrl.pathname === '/warnings') {
+    if (apiPath === '/warnings') {
       response.setHeader('Content-Type', 'text/plain; charset=utf-8')
       response.end(new TextDecoder('euc-kr').decode(responseBuffer))
     } else {

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/api/weather",
+      "destination": "/api/proxy?route=weather"
+    },
+    {
+      "source": "/api/forecast",
+      "destination": "/api/proxy?route=forecast"
+    },
+    {
+      "source": "/api/warnings",
+      "destination": "/api/proxy?route=warnings"
+    },
+    {
+      "source": "/api/typhoon-list",
+      "destination": "/api/proxy?route=typhoon-list"
+    },
+    {
+      "source": "/api/typhoon-detail",
+      "destination": "/api/proxy?route=typhoon-detail"
+    },
+    {
+      "source": "/api/typhoon",
+      "destination": "/api/proxy?route=typhoon"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
