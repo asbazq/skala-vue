@@ -1,14 +1,14 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useWeatherAlertStore = defineStore('weatherAlert', () => {
-  // API의 원본 기온과 비교할 수 있도록 경고 기준은 섭씨로 저장한다.
+export const useWeatherAlertStore = defineStore('personalOutdoorTemperature', () => {
+  // API의 원본 기온과 비교할 수 있도록 개인 외출 기준은 섭씨로 저장한다.
   const heatThreshold = ref(28)
   const coldThreshold = ref(5)
   const alertsEnabled = ref(true)
 
   const thresholdSummary = computed(() => {
-    return `한파 ${coldThreshold.value}℃ 이하 / 폭염 ${heatThreshold.value}℃ 이상`
+    return `${coldThreshold.value}℃ 이하면 외출 주의 / ${heatThreshold.value}℃ 이상이면 외출 주의`
   })
 
   const setHeatThreshold = (temperature) => {
@@ -36,15 +36,15 @@ export const useWeatherAlertStore = defineStore('weatherAlert', () => {
 
   const getRiskLevel = (celsius) => {
     if (!alertsEnabled.value) return 'normal'
-    if (celsius >= heatThreshold.value) return 'heat'
-    if (celsius <= coldThreshold.value) return 'cold'
+    if (celsius >= heatThreshold.value) return 'above-limit'
+    if (celsius <= coldThreshold.value) return 'below-limit'
     return 'normal'
   }
 
   const getRiskLabel = (celsius) => {
     const riskLevel = getRiskLevel(celsius)
-    if (riskLevel === 'heat') return '⚠️ 폭염 경고'
-    if (riskLevel === 'cold') return '❄️ 한파 경고'
+    if (riskLevel === 'above-limit') return '🥵 나가기엔 너무 더워요'
+    if (riskLevel === 'below-limit') return '🥶 나가기엔 너무 추워요'
     return ''
   }
 

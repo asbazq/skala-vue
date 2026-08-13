@@ -1,17 +1,17 @@
 <script setup>
 const guides = [
-  { icon:'☀️', state:'맑음', title:'자외선과 일교차 주의', description:'낮에는 자외선 차단제를 사용하고 아침저녁 기온 차에 대비해 가벼운 겉옷을 준비하세요.', color:'#fbbf24' },
-  { icon:'🌧️', state:'비', title:'우산과 미끄럼 주의', description:'외출 전 강수 확률을 확인하고 미끄럽지 않은 신발과 휴대용 우산을 준비하세요.', color:'#38bdf8' },
-  { icon:'☁️', state:'흐림', title:'기온 변화 대비', description:'구름이 많을 때는 체감온도가 낮아질 수 있으므로 얇은 옷을 여러 겹 착용하세요.', color:'#94a3b8' },
-  { icon:'🌬️', state:'강풍', title:'돌풍과 낙하물 주의', description:'간판과 나뭇가지 주변을 피하고 야외 활동 시 기상 특보를 확인하세요.', color:'#a78bfa' },
+  { icon:'🚪', state:'STEP 1', title:'내 외출 기온 기준 설정', description:'대시보드 아래에서 “이 온도 이하면/이상이면 나가기 싫어요” 값을 정하세요. 기준을 벗어난 지역과 시간대가 파란색 또는 빨간색으로 표시됩니다.', color:'#45d6aa' },
+  { icon:'🗺️', state:'STEP 2', title:'외출 기준 지도 확인', description:'17개 시·도의 행정구역 색으로 외출 적합 여부를 확인하세요. 지역 버튼을 누르면 지도가 해당 위치로 이동하며, 영역과 마커를 클릭하면 상세 날씨가 열립니다.', color:'#38bdf8' },
+  { icon:'🕒', state:'STEP 3', title:'24시간과 일별 예보 확인', description:'현재부터 약 24시간을 3시간 간격 8개 시간대로 확인하세요. 개인 기준을 벗어난 카드에는 상태별 테두리가 표시되며 상세보기에서는 추세 그래프도 제공합니다.', color:'#a78bfa' },
+  { icon:'🚶', state:'STEP 4', title:'어디로 나갈까? 비교', description:'두 지역을 고르면 개인 기온 기준과 강수확률을 이용해 외출하기 좋은 시간대 수, 추천 시간과 더 나가기 좋은 지역을 안내합니다.', color:'#fbbf24' },
 ]
 </script>
 
 <template>
   <section class="guide-view">
-    <header><p>WEATHER SAFETY GUIDE</p><h1>날씨 상태별 안내</h1><span>기상 상태에 맞는 준비사항을 미리 확인하세요.</span></header>
+    <header><p>HOW TO USE 나갈까?</p><h1>이용 안내</h1><span>나만의 외출 기준으로 지역과 시간을 빠르게 결정해 보세요.</span></header>
     <div class="guide-grid"><article v-for="guide in guides" :key="guide.state"><div class="guide-icon" :style="{borderColor:guide.color,color:guide.color}">{{ guide.icon }}</div><div><small>{{ guide.state }}</small><h2>{{ guide.title }}</h2><p>{{ guide.description }}</p></div></article></div>
-    <aside><div><b>태풍 발생 시</b><p>기관별 예상 경로와 예상 범위를 함께 확인하고, 최신 재난문자와 기상청 발표를 우선해 주세요.</p></div><RouterLink to="/">태풍 지도 확인 →</RouterLink></aside>
+    <aside><div><b>태풍 경로는 선택형 지도입니다</b><p>지도 오른쪽의 ‘태풍 경로’를 누르면 기상청 최근 태풍 5개를 확인할 수 있습니다. 태풍 번호를 선택하면 한 경로만 볼 수 있으며, 태풍 정보는 공식 기상청 발표를 우선해 주세요.</p></div><RouterLink to="/">지도 확인 →</RouterLink></aside>
     <RouterLink class="back-link" to="/">← 날씨 대시보드로 돌아가기</RouterLink>
   </section>
 </template>
